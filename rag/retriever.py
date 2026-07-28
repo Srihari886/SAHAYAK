@@ -14,12 +14,11 @@ def get_retriever():
     )
 
     retriever = db.as_retriever(
-    search_type="mmr",
-    search_kwargs={
-        "k": 6,
-        "fetch_k": 20,
-    },
-)
+        search_type="similarity",
+        search_kwargs={
+            "k": 2
+        }
+    )
 
     return retriever
 
@@ -28,16 +27,12 @@ if __name__ == "__main__":
 
     retriever = get_retriever()
 
-    query = "My employer has not paid my salary."
+    docs = retriever.invoke(
+        "My employer has not paid my salary."
+    )
 
-    docs = retriever.invoke(query)
+    for i, doc in enumerate(docs):
 
-    print("=" * 80)
+        print("=" * 80)
 
-    for i, doc in enumerate(docs, start=1):
-
-        print(f"\nDocument {i}\n")
-
-        print(doc.page_content[:700])
-
-        print("\n" + "=" * 80)
+        print(doc.page_content[:500])
